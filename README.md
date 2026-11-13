@@ -1,8 +1,22 @@
 # flanders-cycling-forecast
 
-Hourly cyclist counts at the Flemish road agency's counting stations, predicted one day ahead from weather, calendar and location.
+Hourly cyclist counts at the Flemish road agency's counting stations: a one-day-ahead forecast, a clustering of stations, and an analysis of how holidays and weather shift the counts in each cluster.
 
-This is my part of a group project for Modern Data Analytics at KU Leuven (spring 2026, Group 10). The project topic was the effect of external events on cycling traffic in Flanders. I built the data panel and the predictive model. My teammates did the station clustering, the SHAP analysis, the event-impact analysis and the dashboards, and that work is not in this repo. The submitted group repo is [MDA-Project-Group10](https://github.com/pihaoking/MDA-Project-Group10).
+Group project for Modern Data Analytics at KU Leuven, spring 2026 (Group 10). This repo is a clean copy of the final code, put together after the course ended. The original working history is not included.
+
+## Who did what
+
+| Part | Files | By |
+|---|---|---|
+| Data panel | `src/01_build_event_features.py`, `src/02_build_panel.py`, `src/split.py` | me |
+| Random forest, comparison with XGBoost | `src/cache_predictions.py`, `src/model_diagnostics.py`, `reports/model_diagnostics.md` | me |
+| EDA and model notebook | `src/eda.ipynb` | me (EDA, model) and a teammate (SHAP cells) |
+| SHAP value caches | `src/cache_shap.py`, `src/cache_shap_stratified.py` | me |
+| Station clustering and its dashboard | `Cluster/` | a teammate |
+| Event impact by cluster | `reports/event_line.ipynb` | a teammate and me |
+| Prediction dashboard | `dashboard1.py` | a teammate, styling by me |
+
+The sections below describe the parts I built. `Cluster/README.md` describes the clustering.
 
 ## Data
 
@@ -21,6 +35,7 @@ None of it is in the repo. `data/` is ignored.
 | `src/02_build_panel.py` | aggregates counts to hourly, attaches the nearest weather region, holidays and road bearing. 9.8 million rows, 150 stations |
 | `src/split.py` | train 2023, validation 2024, test 2025 |
 | `src/cache_predictions.py` | fits the random forest and saves predictions for all three splits |
+| `src/cache_shap.py`, `src/cache_shap_stratified.py` | compute SHAP values once on a sample and save them for the notebooks |
 | `src/model_diagnostics.py` | random forest against XGBoost: 5-fold CV, per-segment RMSE, residuals |
 | `src/plot_hourly_profile.py` | the figure below |
 
@@ -52,6 +67,8 @@ The mean count in the test set is 11.7 cyclists per hour per direction, so an MA
 
 The model follows the two commuting peaks on working days and overpredicts by up to about 2.4 cyclists per hour on weekends and holidays.
 
+`reports/model_diagnostics.md` is the earlier comparison with XGBoost. It was written for the 23-feature model without the lag, so its numbers are lower than the table above.
+
 ## Limits
 
 - With the lag feature this is a one-day-ahead forecast. It cannot be used for longer horizons.
@@ -70,6 +87,8 @@ python src/01_build_event_features.py
 python src/02_build_panel.py
 python src/cache_predictions.py
 python src/plot_hourly_profile.py
+shiny run dashboard1.py
+shiny run Cluster/dashboard.py
 ```
 
-The raw files have to be in `data/` first. Building the panel takes about three minutes and fitting the forest about three more.
+The raw files have to be in `data/` first. Building the panel takes about three minutes and fitting the forest about three more. `src/cache_shap.py` is slow, over an hour on my machine.
