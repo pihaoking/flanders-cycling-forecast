@@ -73,9 +73,7 @@ def fit_xgb(X, y):
 
 
 def cv_diagnostics(X_tr, y_tr):
-    print("=" * 70)
     print("1. Train-internal 5-fold CV (overfitting vs distribution shift)")
-    print("=" * 70)
     kf = KFold(n_splits=5, shuffle=True, random_state=42)
     rf_scores, xgb_scores = [], []
     for fold, (i_tr, i_va) in enumerate(kf.split(X_tr), 1):
@@ -92,9 +90,7 @@ def cv_diagnostics(X_tr, y_tr):
 
 def segment_rmse(test_df, y_te, rf_pred, xgb_pred):
     print()
-    print("=" * 70)
     print("2. Per-segment RMSE on test")
-    print("=" * 70)
     df = pd.DataFrame({
         "y": y_te.values,
         "rf": rf_pred,
@@ -131,9 +127,7 @@ def segment_rmse(test_df, y_te, rf_pred, xgb_pred):
 
 def residual_diagnostics(y_te, rf_pred, xgb_pred):
     print()
-    print("=" * 70)
     print("3. Residual diagnostics on test")
-    print("=" * 70)
     rf_res = y_te.values - rf_pred
     xgb_res = y_te.values - xgb_pred
     rows = []
