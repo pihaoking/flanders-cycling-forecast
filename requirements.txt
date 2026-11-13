@@ -66,3 +66,5 @@ watchfiles==1.1.1
 wcwidth==0.6.0
 websockets==16.0
 widgetsnbextension==4.0.15
+shap
+xgboost
