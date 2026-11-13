@@ -12,9 +12,7 @@ ORANGE = "#D98B32"
 RED = "#C95D63"
 GREY = "#857A70"
 
-# ---------------------------------------------------------------------------
 # Data  
-# ---------------------------------------------------------------------------
 HERE = Path(__file__).parent
 
 # Load pre-computed predictions (joined with actual counts)
@@ -30,9 +28,7 @@ else:
     df_panel["datetime"] = pd.to_datetime(df_panel["datetime"])
     HAS_PREDICTIONS = False
 
-# ---------------------------------------------------------------------------
 # UI
-# ---------------------------------------------------------------------------
 app_ui = ui.page_fluid(
     ui.tags.style("""
         body { background: #f4f6f9; font-family: sans-serif; }
@@ -71,9 +67,7 @@ app_ui = ui.page_fluid(
 )
 
 
-# ---------------------------------------------------------------------------
 # Server
-# ---------------------------------------------------------------------------
 def server(input, output, session):
 
     @reactive.calc
